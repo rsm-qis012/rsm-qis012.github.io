@@ -1,0 +1,18 @@
+---
+title: "Project 1"
+author: "Qingyao Sun"
+date: today
+---
+
+# Project Overview
+
+This project shows an example of data analysis and business insight.
+
+## Business Question
+
+What factors affect the result?
+
+## Simple Example
+
+```{r}
+1 + 1

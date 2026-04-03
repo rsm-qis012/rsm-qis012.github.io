@@ -1,0 +1,93 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Qingyao Sun",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Resume.html",
+    "href": "Resume.html",
+    "title": "Resume",
+    "section": "",
+    "text": "Download PDF file."
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "Resume",
+    "section": "",
+    "text": "Download PDF file."
+  },
+  {
+    "objectID": "Blog/Project 1/Index.html",
+    "href": "Blog/Project 1/Index.html",
+    "title": "Project 1",
+    "section": "",
+    "text": "This project shows an example of data analysis and business insight.\n\n\nWhat factors affect the result?\n\n\n\n1 + 1"
+  },
+  {
+    "objectID": "Blog/Project 1/Index.html#business-question",
+    "href": "Blog/Project 1/Index.html#business-question",
+    "title": "Project 1",
+    "section": "",
+    "text": "What factors affect the result?"
+  },
+  {
+    "objectID": "Blog/Project 1/Index.html#simple-example",
+    "href": "Blog/Project 1/Index.html#simple-example",
+    "title": "Project 1",
+    "section": "",
+    "text": "1 + 1"
+  },
+  {
+    "objectID": "Blog.html",
+    "href": "Blog.html",
+    "title": "My Projects",
+    "section": "",
+    "text": "No matching items"
+  },
+  {
+    "objectID": "Blog/Project 2/Index.html",
+    "href": "Blog/Project 2/Index.html",
+    "title": "Project 2",
+    "section": "",
+    "text": "This is my second project page.\n\n\nI will add project details here later."
+  },
+  {
+    "objectID": "Blog/Project 2/Index.html#summary",
+    "href": "Blog/Project 2/Index.html#summary",
+    "title": "Project 2",
+    "section": "",
+    "text": "I will add project details here later."
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "My Projects",
+    "section": "",
+    "text": "Project 2\n\n\n\n\n\n\nQingyao Sun\n\n\nApr 3, 2026\n\n\n\n\n\n\n\n\n\n\n\nProject 1\n\n\n\n\n\n\nQingyao Sun\n\n\nApr 3, 2026\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "blog/project 1/index.html",
+    "href": "blog/project 1/index.html",
+    "title": "Project 1",
+    "section": "",
+    "text": "This project shows an example of data analysis and business insight.\n\n\nWhat factors affect the result?\n\n\n\n1 + 1"
+  },
+  {
+    "objectID": "blog/project 1/index.html#business-question",
+    "href": "blog/project 1/index.html#business-question",
+    "title": "Project 1",
+    "section": "",
+    "text": "What factors affect the result?"
+  },
+  {
+    "objectID": "blog/project 1/index.html#simple-example",
+    "href": "blog/project 1/index.html#simple-example",
+    "title": "Project 1",
+    "section": "",
+    "text": "1 + 1"
+  }
+]
