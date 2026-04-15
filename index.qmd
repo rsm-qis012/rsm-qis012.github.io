@@ -4,11 +4,8 @@ about:
   template: jolla
   image: Image/photo.jpg
   links:
-    - icon: Bluesky
-      text: Bluesky
-      href: https://bsky.app
     - icon: github
       text: Github
-      href: https://github.com
+      href: https://github.com/rsm-qis012/rsm-qis012.github.io
       
 ---
