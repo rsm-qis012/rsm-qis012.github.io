@@ -7,6 +7,27 @@
     "text": "Project 2\n\n\n\n\n\n\nQingyao Sun\n\n\nApr 15, 2026\n\n\n\n\n\n\n\n\n\n\n\nA/B Testing a Call to Action\n\n\n\n\n\n\nQingyao Sun\n\n\nApr 15, 2026\n\n\n\n\n\n\nNo matching items"
   },
   {
+    "objectID": "blog/project 2/index.html",
+    "href": "blog/project 2/index.html",
+    "title": "Project 2",
+    "section": "",
+    "text": "This is my second project page.\n\n\nI will add project details here later."
+  },
+  {
+    "objectID": "blog/project 2/index.html#summary",
+    "href": "blog/project 2/index.html#summary",
+    "title": "Project 2",
+    "section": "",
+    "text": "I will add project details here later."
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "Resume",
+    "section": "",
+    "text": "Download PDF file."
+  },
+  {
     "objectID": "blog/project 1/hw1_questions.html",
     "href": "blog/project 1/hw1_questions.html",
     "title": "A/B Testing a Call to Action",
@@ -82,33 +103,5 @@
     "title": "A/B Testing a Call to Action",
     "section": "Conclusion",
     "text": "Conclusion\nThis simulated A/B test illustrates several key ideas from classical frequentist statistics. The Law of Large Numbers explains why the estimator becomes more stable as the sample grows, the bootstrap provides a practical way to estimate uncertainty, and the Central Limit Theorem justifies the Normal approximation used in hypothesis testing.\nThe analysis also shows that the same two-sample comparison can be expressed as a regression, which connects experimental analysis to a much broader empirical toolkit. Finally, the peeking simulation highlights an important practical warning: good inference depends not only on the data, but also on following a valid testing procedure.\nTaken together, these results show why frequentist tools are so useful in A/B testing and why careful experimental design matters just as much as computation."
-  },
-  {
-    "objectID": "resume.html",
-    "href": "resume.html",
-    "title": "Resume",
-    "section": "",
-    "text": "Download PDF file."
-  },
-  {
-    "objectID": "blog/project 2/index.html",
-    "href": "blog/project 2/index.html",
-    "title": "Project 2",
-    "section": "",
-    "text": "This is my second project page.\n\n\nI will add project details here later."
-  },
-  {
-    "objectID": "blog/project 2/index.html#summary",
-    "href": "blog/project 2/index.html#summary",
-    "title": "Project 2",
-    "section": "",
-    "text": "I will add project details here later."
-  },
-  {
-    "objectID": "blog/project 1/index.html",
-    "href": "blog/project 1/index.html",
-    "title": "A/B Testing a Call to Action",
-    "section": "",
-    "text": "Project Description\nA simulation-based A/B test illustrating key ideas from classical frequentist statistics."
   }
 ]
