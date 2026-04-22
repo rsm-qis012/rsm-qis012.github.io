@@ -1,13 +1,264 @@
 ---
-title: "Project 2"
+title: "Replication of Card & Krueger (1994)"
+subtitle: "Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania"
 author: "Qingyao Sun"
 date: today
+format: html
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
 
-# Project Overview
+## Introduction
 
-This is my second project page.
+Card and Krueger (1994) study a basic question in labor economics: does raising the minimum wage reduce employment? In 1992, New Jersey increased its minimum wage from $4.25 to $5.05 per hour, while nearby Pennsylvania did not. This policy change gives the authors a way to compare fast-food restaurants in the two states and see whether employment changed after the wage increase.
 
-## Summary
+This question matters because the usual prediction from standard economic theory is that a higher minimum wage should lead firms to hire fewer workers, especially in low-wage industries. Fast-food restaurants are a useful setting for studying this issue because they employ many low-wage workers and are likely to be directly affected by changes in minimum wage policy. The authors collected survey data from restaurants in New Jersey and eastern Pennsylvania before and after the policy change to measure employment outcomes.
 
-I will add project details here later.
+The main idea of the paper is to compare the change in employment in New Jersey to the change in employment in Pennsylvania over the same period. This is a difference-in-differences approach. If the two states would have followed similar trends without the policy change, then the difference between those two changes can be interpreted as the effect of the higher minimum wage. In this replication, I focus on reproducing one of the paper’s main findings and then add a simple graph to show the employment patterns more clearly.
+
+## Main Analysis
+
+The key statistical finding I replicate is the paper’s main result that employment did not fall in New Jersey relative to Pennsylvania after the minimum wage increase. In the paper, this shows up in the difference-in-differences comparison in Table 3 and in the reduced-form regression in Table 4, column (i). These are the main results I focus on below.
+
+For the main analysis, I try to match the tables in Card and Krueger (1994) as closely as possible using the public replication data. Following the paper, I measure employment as full-time-equivalent employment (FTE), which counts full-time workers and managers fully and counts part-time workers as one-half. Then I use those variables to reproduce part of Table 2, the first three rows and first three columns of Table 3, and column (i) of Table 4.
+
+```{r}
+library(tidyverse)
+library(knitr)
+```
+
+### Load the data
+
+```{r}
+if (!file.exists("public.dat")) unzip("njmin.zip")
+```
+
+```{r}
+nj <- read_fwf(
+  "public.dat",
+  col_positions = fwf_positions(
+    start = c(
+      1, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 26, 32, 38, 44, 50,
+      56, 62, 64, 70, 72, 78, 84, 90, 96, 102, 105, 108, 110, 112,
+      119, 122, 128, 134, 140, 146, 152, 158, 160, 162, 168, 174,
+      180, 186, 192, 195
+    ),
+    end = c(
+      3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 24, 30, 36, 42, 48, 54,
+      60, 62, 68, 70, 76, 82, 88, 94, 100, 103, 106, 108, 110, 117,
+      120, 126, 132, 138, 144, 150, 156, 158, 160, 166, 172, 178,
+      184, 190, 193, 196
+    ),
+    col_names = c(
+      "SHEET","CHAIN","CO_OWNED","STATE","SOUTHJ","CENTRALJ","NORTHJ","PA1","PA2","SHORE",
+      "NCALLS","EMPFT","EMPPT","NMGRS","WAGE_ST","INCTIME","FIRSTINC","BONUS","PCTAFF","MEALS",
+      "OPEN","HRSOPEN","PSODA","PFRY","PENTREE","NREGS","NREGS11",
+      "TYPE2","STATUS2","DATE2","NCALLS2","EMPFT2","EMPPT2","NMGRS2","WAGE_ST2","INCTIME2",
+      "FIRSTIN2","SPECIAL2","MEALS2","OPEN2R","HRSOPEN2","PSODA2","PFRY2","PENTREE2","NREGS2","NREGS112"
+    )
+  ),
+  trim_ws = TRUE,
+  col_types = cols(.default = col_character())
+)
+```
+
+### Construct the main variables
+
+I use the same basic employment measure as the paper:
+
+- FTE before = full-time workers + managers + 0.5 × part-time workers
+- FTE after = full-time workers + managers + 0.5 × part-time workers in wave 2
+
+For Table 3, the paper sets employment equal to zero for permanently closed stores in wave 2, so I do the same.
+
+```{r}
+nj <- nj %>%
+  mutate(across(everything(), ~ trimws(.x))) %>%
+  mutate(across(everything(), ~ na_if(.x, ""))) %>%
+  mutate(across(
+    c(
+      SHEET, CHAIN, CO_OWNED, STATE, SOUTHJ, CENTRALJ, NORTHJ, PA1, PA2, SHORE,
+      NCALLS, EMPFT, EMPPT, NMGRS, WAGE_ST, INCTIME, FIRSTINC, BONUS, PCTAFF, MEALS,
+      OPEN, HRSOPEN, PSODA, PFRY, PENTREE, NREGS, NREGS11,
+      TYPE2, STATUS2, DATE2, NCALLS2, EMPFT2, EMPPT2, NMGRS2, WAGE_ST2, INCTIME2,
+      FIRSTIN2, SPECIAL2, MEALS2, OPEN2R, HRSOPEN2, PSODA2, PFRY2, PENTREE2, NREGS2, NREGS112
+    ),
+    ~ suppressWarnings(as.numeric(.x))
+  )) %>%
+  mutate(
+    state_name = if_else(STATE == 1, "NJ", "PA"),
+    NJ = if_else(STATE == 1, 1, 0),
+    fte_before = EMPFT + NMGRS + 0.5 * EMPPT,
+    fte_after_raw = EMPFT2 + NMGRS2 + 0.5 * EMPPT2,
+    permanently_closed = if_else(STATUS2 == 3, 1, 0),
+    fte_after_t3 = if_else(permanently_closed == 1, 0, fte_after_raw),
+    d_fte = fte_after_t3 - fte_before,
+    gap = case_when(
+      STATE == 0 ~ 0,
+      WAGE_ST >= 5.05 ~ 0,
+      WAGE_ST > 0 ~ (5.05 - WAGE_ST) / WAGE_ST,
+      TRUE ~ NA_real_
+    )
+  )
+```
+
+### Part of Table 2
+
+I report a few of the most important entries: FTE employment, starting wage, and hours open in wave 1 and wave 2, separately for New Jersey and Pennsylvania.
+
+```{r}
+table2_rep <- nj %>%
+  group_by(state_name) %>%
+  summarise(
+    `Wave 1 FTE employment` = mean(fte_before, na.rm = TRUE),
+    `Wave 1 starting wage` = mean(WAGE_ST, na.rm = TRUE),
+    `Wave 1 hours open` = mean(HRSOPEN, na.rm = TRUE),
+    `Wave 2 FTE employment` = mean(fte_after_t3, na.rm = TRUE),
+    `Wave 2 starting wage` = mean(WAGE_ST2, na.rm = TRUE),
+    `Wave 2 hours open` = mean(HRSOPEN2, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+kable(table2_rep, digits = 2, caption = "Replication of selected entries from Table 2")
+```
+
+These numbers reproduce the main pattern in Table 2. In particular, starting wages in New Jersey rise sharply between wave 1 and wave 2, while employment does not fall relative to Pennsylvania.
+
+### Table 3: rows 1–3 and columns 1–3
+
+Next I reproduce the exact part of Table 3. The rows are FTE employment before, FTE employment after, and the change in mean FTE employment. The columns are Pennsylvania, New Jersey, and the difference between New Jersey and Pennsylvania.
+
+```{r}
+pa_before <- nj %>%
+  filter(STATE == 0) %>%
+  summarise(x = mean(fte_before, na.rm = TRUE)) %>%
+  pull(x)
+
+nj_before <- nj %>%
+  filter(STATE == 1) %>%
+  summarise(x = mean(fte_before, na.rm = TRUE)) %>%
+  pull(x)
+
+pa_after <- nj %>%
+  filter(STATE == 0) %>%
+  summarise(x = mean(fte_after_t3, na.rm = TRUE)) %>%
+  pull(x)
+
+nj_after <- nj %>%
+  filter(STATE == 1) %>%
+  summarise(x = mean(fte_after_t3, na.rm = TRUE)) %>%
+  pull(x)
+
+table3_rep <- tibble(
+  Variable = c(
+    "1. FTE employment before, all available observations",
+    "2. FTE employment after, all available observations",
+    "3. Change in mean FTE employment"
+  ),
+  PA = c(
+    pa_before,
+    pa_after,
+    pa_after - pa_before
+  ),
+  NJ = c(
+    nj_before,
+    nj_after,
+    nj_after - nj_before
+  ),
+  `Difference (NJ - PA)` = c(
+    nj_before - pa_before,
+    nj_after - pa_after,
+    (nj_after - nj_before) - (pa_after - pa_before)
+  )
+)
+
+kable(table3_rep, digits = 2, caption = "Replication of Table 3, rows 1-3 and columns 1-3")
+```
+
+The most important number here is the last entry in the third row, which is the difference-in-differences estimate. That value shows whether employment changed more in New Jersey than in Pennsylvania after the minimum wage increase.
+
+### Table 4, column (i)
+
+Finally, I reproduce column (i) of Table 4. In the paper, this is a reduced-form regression where the dependent variable is the change in FTE employment and the main explanatory variable is a New Jersey dummy.
+
+To stay close to the paper, I use the sample of stores with valid employment data and valid wage information in both waves, plus stores that permanently closed in wave 2.
+
+```{r}
+table4_sample <- nj %>%
+  mutate(dwage = WAGE_ST2 - WAGE_ST) %>%
+  filter(!is.na(d_fte)) %>%
+  filter(permanently_closed == 1 | (permanently_closed == 0 & !is.na(dwage)))
+
+model_t4_i <- lm(d_fte ~ NJ, data = table4_sample)
+
+t4_i <- tibble(
+  Term = "New Jersey dummy",
+  Coefficient = coef(summary(model_t4_i))["NJ", "Estimate"],
+  `Std. Error` = coef(summary(model_t4_i))["NJ", "Std. Error"]
+)
+
+kable(t4_i, digits = 2, caption = "Replication of Table 4, column (i)")
+```
+
+This coefficient is the reduced-form estimate of the minimum wage effect in the simplest regression specification. If the estimate is positive, it means employment rose more in New Jersey than in Pennsylvania, which goes against the basic prediction that a higher minimum wage must reduce employment.
+
+### Discussion
+
+The main statistical finding in Card and Krueger (1994) is that the increase in New Jersey’s minimum wage did not reduce fast-food employment relative to Pennsylvania. My replication focuses on that result in two ways: first, by reproducing the difference-in-differences comparison in Table 3, and second, by reproducing the reduced-form regression in Table 4, column (i).
+
+Looking at the replicated Table 3 results, the key number is the difference-in-differences estimate in the third row and third column. That number shows whether employment changed differently in New Jersey than in Pennsylvania after the policy change. The replicated Table 4 regression gives the same basic test in regression form through the coefficient on the New Jersey dummy.
+
+So yes, this section does replicate a key statistical finding from the paper, not just descriptive numbers. The point of the replication is to check whether the data support the standard prediction that a higher minimum wage reduces employment. Like the original paper, the results show that employment in New Jersey does not fall relative to Pennsylvania after the minimum wage increase.
+
+## Something Additional
+
+I graph the average level of employment before and after the minimum wage increase in New Jersey and Pennsylvania. The original paper mainly presents its main result in table form, so showing the same pattern graphically makes it easier to see what drives the difference-in-differences estimate. I also briefly explain why the difference-in-differences design can be used to make a causal claim in this setting.
+
+### Graphing the main result
+
+```{r}
+plot_df <- nj %>%
+  group_by(state_name) %>%
+  summarise(
+    Before = mean(fte_before, na.rm = TRUE),
+    After = mean(fte_after_t3, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(
+    cols = c(Before, After),
+    names_to = "Period",
+    values_to = "Mean_FTE"
+  )
+
+plot_df$Period <- factor(plot_df$Period, levels = c("Before", "After"))
+
+p <- ggplot(plot_df, aes(x = Period, y = Mean_FTE, group = state_name, linetype = state_name)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Average Fast-Food Employment Before and After the Minimum Wage Increase",
+    x = "",
+    y = "Mean FTE Employment",
+    linetype = "State"
+  ) +
+  theme_minimal()
+
+print(p)
+```
+The graph shows the same basic result as the tables. Employment in New Jersey does not fall relative to Pennsylvania after the minimum wage increase. In other words, the visual pattern is consistent with the paper’s main finding that the policy did not reduce employment in this sample.
+
+### Why the difference-in-differences design can be interpreted causally
+
+The main empirical strategy in the paper is difference-in-differences. The idea is to compare how employment changed in New Jersey before and after the policy, and then subtract the change in Pennsylvania over the same period. Pennsylvania acts as a control group because its minimum wage did not change at that time. If employment in the two states would have followed similar trends in the absence of the policy change, then the remaining difference can be interpreted as the effect of the minimum wage increase.
+
+This is useful because simply comparing New Jersey and Pennsylvania at one point in time would not be enough. The two states may already differ for many reasons, such as store size, local demand, or business conditions. Likewise, just looking at New Jersey before and after the law would also be incomplete, because employment could change over time for reasons unrelated to minimum wage policy. The difference-in-differences approach removes those two simpler sources of bias by comparing changes over time across both states.
+
+Of course, this interpretation depends on an important assumption: without the minimum wage increase, employment trends in New Jersey and Pennsylvania would have been similar. Card and Krueger argue that eastern Pennsylvania is a reasonable comparison group for New Jersey because the states are geographically close and the fast-food industry is similar across the two areas. That is why the difference-in-differences estimate is central to the paper’s causal argument.
+
+## Conclusion
+
+This replication reproduces the main result in Card and Krueger (1994): the increase in New Jersey’s minimum wage does not appear to reduce fast-food employment relative to Pennsylvania. The difference-in-differences comparison in Table 3 and the reduced-form regression in Table 4, column (i), both point in the same direction.
+
+My estimates may not match the published numbers exactly because of small differences in sample handling or missing observations, but the overall conclusion is the same. The additional graph also makes the result easier to see visually. Overall, this replication shows why the paper became so influential in labor economics: its findings challenge the simple prediction that higher minimum wages must reduce employment.

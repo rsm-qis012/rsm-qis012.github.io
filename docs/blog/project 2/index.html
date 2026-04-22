@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Qingyao Sun">
-<meta name="dcterms.date" content="2026-04-15">
+<meta name="dcterms.date" content="2026-04-22">
 
-<title>Project 2 – Qingyao’s Website</title>
+<title>Replication of Card &amp; Krueger (1994) – Qingyao’s Website</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -123,7 +123,8 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project 2</h1>
+<h1 class="title">Replication of Card &amp; Krueger (1994)</h1>
+<p class="subtitle lead">Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania</p>
 </div>
 
 
@@ -140,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 15, 2026</p>
+      <p class="date">April 22, 2026</p>
     </div>
   </div>
   
@@ -152,15 +153,189 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="project-overview" class="level1">
-<h1>Project Overview</h1>
-<p>This is my second project page.</p>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
-<p>I will add project details here later.</p>
-
-
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Card and Krueger (1994) study a basic question in labor economics: does raising the minimum wage reduce employment? In 1992, New Jersey increased its minimum wage from $4.25 to $5.05 per hour, while nearby Pennsylvania did not. This policy change gives the authors a way to compare fast-food restaurants in the two states and see whether employment changed after the wage increase.</p>
+<p>This question matters because the usual prediction from standard economic theory is that a higher minimum wage should lead firms to hire fewer workers, especially in low-wage industries. Fast-food restaurants are a useful setting for studying this issue because they employ many low-wage workers and are likely to be directly affected by changes in minimum wage policy. The authors collected survey data from restaurants in New Jersey and eastern Pennsylvania before and after the policy change to measure employment outcomes.</p>
+<p>The main idea of the paper is to compare the change in employment in New Jersey to the change in employment in Pennsylvania over the same period. This is a difference-in-differences approach. If the two states would have followed similar trends without the policy change, then the difference between those two changes can be interpreted as the effect of the higher minimum wage. In this replication, I focus on reproducing one of the paper’s main findings and then add a simple graph to show the employment patterns more clearly.</p>
 </section>
+<section id="main-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="main-analysis">Main Analysis</h2>
+<p>The key statistical finding I replicate is the paper’s main result that employment did not fall in New Jersey relative to Pennsylvania after the minimum wage increase. In the paper, this shows up in the difference-in-differences comparison in Table 3 and in the reduced-form regression in Table 4, column (i). These are the main results I focus on below.</p>
+<p>For the main analysis, I try to match the tables in Card and Krueger (1994) as closely as possible using the public replication data. Following the paper, I measure employment as full-time-equivalent employment (FTE), which counts full-time workers and managers fully and counts part-time workers as one-half. Then I use those variables to reproduce part of Table 2, the first three rows and first three columns of Table 3, and column (i) of Table 4.</p>
+<section id="load-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-the-data">Load the data</h3>
+</section>
+<section id="construct-the-main-variables" class="level3">
+<h3 class="anchored" data-anchor-id="construct-the-main-variables">Construct the main variables</h3>
+<p>I use the same basic employment measure as the paper:</p>
+<ul>
+<li>FTE before = full-time workers + managers + 0.5 × part-time workers</li>
+<li>FTE after = full-time workers + managers + 0.5 × part-time workers in wave 2</li>
+</ul>
+<p>For Table 3, the paper sets employment equal to zero for permanently closed stores in wave 2, so I do the same.</p>
+</section>
+<section id="part-of-table-2" class="level3">
+<h3 class="anchored" data-anchor-id="part-of-table-2">Part of Table 2</h3>
+<p>I report a few of the most important entries: FTE employment, starting wage, and hours open in wave 1 and wave 2, separately for New Jersey and Pennsylvania.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Replication of selected entries from Table 2</caption>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 16%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 16%">
+<col style="width: 15%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">state_name</th>
+<th style="text-align: right;">Wave 1 FTE employment</th>
+<th style="text-align: right;">Wave 1 starting wage</th>
+<th style="text-align: right;">Wave 1 hours open</th>
+<th style="text-align: right;">Wave 2 FTE employment</th>
+<th style="text-align: right;">Wave 2 starting wage</th>
+<th style="text-align: right;">Wave 2 hours open</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">NJ</td>
+<td style="text-align: right;">20.44</td>
+<td style="text-align: right;">4.61</td>
+<td style="text-align: right;">14.42</td>
+<td style="text-align: right;">21.03</td>
+<td style="text-align: right;">5.08</td>
+<td style="text-align: right;">14.42</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PA</td>
+<td style="text-align: right;">23.33</td>
+<td style="text-align: right;">4.63</td>
+<td style="text-align: right;">14.53</td>
+<td style="text-align: right;">21.17</td>
+<td style="text-align: right;">4.62</td>
+<td style="text-align: right;">14.65</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>These numbers reproduce the main pattern in Table 2. In particular, starting wages in New Jersey rise sharply between wave 1 and wave 2, while employment does not fall relative to Pennsylvania.</p>
+</section>
+<section id="table-3-rows-13-and-columns-13" class="level3">
+<h3 class="anchored" data-anchor-id="table-3-rows-13-and-columns-13">Table 3: rows 1–3 and columns 1–3</h3>
+<p>Next I reproduce the exact part of Table 3. The rows are FTE employment before, FTE employment after, and the change in mean FTE employment. The columns are Pennsylvania, New Jersey, and the difference between New Jersey and Pennsylvania.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Replication of Table 3, rows 1-3 and columns 1-3</caption>
+<colgroup>
+<col style="width: 61%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: right;">PA</th>
+<th style="text-align: right;">NJ</th>
+<th style="text-align: right;">Difference (NJ - PA)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1. FTE employment before, all available observations</td>
+<td style="text-align: right;">23.33</td>
+<td style="text-align: right;">20.44</td>
+<td style="text-align: right;">-2.89</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2. FTE employment after, all available observations</td>
+<td style="text-align: right;">21.17</td>
+<td style="text-align: right;">21.03</td>
+<td style="text-align: right;">-0.14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">3. Change in mean FTE employment</td>
+<td style="text-align: right;">-2.17</td>
+<td style="text-align: right;">0.59</td>
+<td style="text-align: right;">2.75</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The most important number here is the last entry in the third row, which is the difference-in-differences estimate. That value shows whether employment changed more in New Jersey than in Pennsylvania after the minimum wage increase.</p>
+</section>
+<section id="table-4-column-i" class="level3">
+<h3 class="anchored" data-anchor-id="table-4-column-i">Table 4, column (i)</h3>
+<p>Finally, I reproduce column (i) of Table 4. In the paper, this is a reduced-form regression where the dependent variable is the change in FTE employment and the main explanatory variable is a New Jersey dummy.</p>
+<p>To stay close to the paper, I use the sample of stores with valid employment data and valid wage information in both waves, plus stores that permanently closed in wave 2.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Replication of Table 4, column (i)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Term</th>
+<th style="text-align: right;">Coefficient</th>
+<th style="text-align: right;">Std. Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">New Jersey dummy</td>
+<td style="text-align: right;">2.33</td>
+<td style="text-align: right;">1.19</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This coefficient is the reduced-form estimate of the minimum wage effect in the simplest regression specification. If the estimate is positive, it means employment rose more in New Jersey than in Pennsylvania, which goes against the basic prediction that a higher minimum wage must reduce employment.</p>
+</section>
+<section id="discussion" class="level3">
+<h3 class="anchored" data-anchor-id="discussion">Discussion</h3>
+<p>The main statistical finding in Card and Krueger (1994) is that the increase in New Jersey’s minimum wage did not reduce fast-food employment relative to Pennsylvania. My replication focuses on that result in two ways: first, by reproducing the difference-in-differences comparison in Table 3, and second, by reproducing the reduced-form regression in Table 4, column (i).</p>
+<p>Looking at the replicated Table 3 results, the key number is the difference-in-differences estimate in the third row and third column. That number shows whether employment changed differently in New Jersey than in Pennsylvania after the policy change. The replicated Table 4 regression gives the same basic test in regression form through the coefficient on the New Jersey dummy.</p>
+<p>So yes, this section does replicate a key statistical finding from the paper, not just descriptive numbers. The point of the replication is to check whether the data support the standard prediction that a higher minimum wage reduces employment. Like the original paper, the results show that employment in New Jersey does not fall relative to Pennsylvania after the minimum wage increase.</p>
+</section>
+</section>
+<section id="something-additional" class="level2">
+<h2 class="anchored" data-anchor-id="something-additional">Something Additional</h2>
+<p>I graph the average level of employment before and after the minimum wage increase in New Jersey and Pennsylvania. The original paper mainly presents its main result in table form, so showing the same pattern graphically makes it easier to see what drives the difference-in-differences estimate. I also briefly explain why the difference-in-differences design can be used to make a causal claim in this setting.</p>
+<section id="graphing-the-main-result" class="level3">
+<h3 class="anchored" data-anchor-id="graphing-the-main-result">Graphing the main result</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph shows the same basic result as the tables. Employment in New Jersey does not fall relative to Pennsylvania after the minimum wage increase. In other words, the visual pattern is consistent with the paper’s main finding that the policy did not reduce employment in this sample.</p>
+</section>
+<section id="why-the-difference-in-differences-design-can-be-interpreted-causally" class="level3">
+<h3 class="anchored" data-anchor-id="why-the-difference-in-differences-design-can-be-interpreted-causally">Why the difference-in-differences design can be interpreted causally</h3>
+<p>The main empirical strategy in the paper is difference-in-differences. The idea is to compare how employment changed in New Jersey before and after the policy, and then subtract the change in Pennsylvania over the same period. Pennsylvania acts as a control group because its minimum wage did not change at that time. If employment in the two states would have followed similar trends in the absence of the policy change, then the remaining difference can be interpreted as the effect of the minimum wage increase.</p>
+<p>This is useful because simply comparing New Jersey and Pennsylvania at one point in time would not be enough. The two states may already differ for many reasons, such as store size, local demand, or business conditions. Likewise, just looking at New Jersey before and after the law would also be incomplete, because employment could change over time for reasons unrelated to minimum wage policy. The difference-in-differences approach removes those two simpler sources of bias by comparing changes over time across both states.</p>
+<p>Of course, this interpretation depends on an important assumption: without the minimum wage increase, employment trends in New Jersey and Pennsylvania would have been similar. Card and Krueger argue that eastern Pennsylvania is a reasonable comparison group for New Jersey because the states are geographically close and the fast-food industry is similar across the two areas. That is why the difference-in-differences estimate is central to the paper’s causal argument.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This replication reproduces the main result in Card and Krueger (1994): the increase in New Jersey’s minimum wage does not appear to reduce fast-food employment relative to Pennsylvania. The difference-in-differences comparison in Table 3 and the reduced-form regression in Table 4, column (i), both point in the same direction.</p>
+<p>My estimates may not match the published numbers exactly because of small differences in sample handling or missing observations, but the overall conclusion is the same. The additional graph also makes the result easier to see visually. Overall, this replication shows why the paper became so influential in labor economics: its findings challenge the simple prediction that higher minimum wages must reduce employment.</p>
+
+
 </section>
 
 </main> <!-- /main -->
