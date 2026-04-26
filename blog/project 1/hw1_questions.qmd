@@ -30,7 +30,7 @@ A website's landing page often includes a short message encouraging visitors to 
 
 To compare the two versions, I will run an A/B test. Visitors are randomly assigned to see one of the two CTAs, and I then compare the sign-up rates across the two groups. Because assignment is random, differences in outcomes can be interpreted as evidence about the effect of the CTA wording rather than pre-existing differences between visitors.
 
-In this post, I use a simulated A/B test to illustrate several core ideas from classical frequentist statistics, including the Law of Large Numbers, bootstrap standard errors, the Central Limit Theorem, hypothesis testing, regression, and the danger of peeking at results too often.
+In this post, I use a simulated A/B test to illustrate several core ideas from classical frequentist statistics, including the Law of Large Numbers, bootstrap standard errors, the Central Limit Theorem, hypothesis testing, regression, and the danger of peeking at results too often. Because the true conversion probabilities are known in the simulation, the results can be compared directly with the data-generating process.
 
 
 ## The A/B Test as a Statistical Problem
@@ -353,4 +353,4 @@ This simulated A/B test illustrates several key ideas from classical frequentist
 
 The analysis also shows that the same two-sample comparison can be expressed as a regression, which connects experimental analysis to a much broader empirical toolkit. Finally, the peeking simulation highlights an important practical warning: good inference depends not only on the data, but also on following a valid testing procedure.
 
-Taken together, these results show why frequentist tools are so useful in A/B testing and why careful experimental design matters just as much as computation.
+Taken together, these results show why frequentist tools are so useful in A/B testing and why careful experimental design matters just as much as computation. In a real experiment, the sample size and stopping rule should be chosen before the test begins so that the final inference remains valid.
