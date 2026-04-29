@@ -353,4 +353,6 @@ This simulated A/B test illustrates several key ideas from classical frequentist
 
 The analysis also shows that the same two-sample comparison can be expressed as a regression, which connects experimental analysis to a much broader empirical toolkit. Finally, the peeking simulation highlights an important practical warning: good inference depends not only on the data, but also on following a valid testing procedure.
 
+From a practical business perspective, this example also shows why A/B testing should not only focus on whether a result is statistically significant. The size of the effect, the uncertainty around the estimate, and the testing procedure all matter when deciding whether one version should replace another. For example, even if CTA A has a higher observed sign-up rate, I would still want to check whether the improvement is large enough to matter in practice and whether the experiment was run without repeated peeking.
+
 Taken together, these results show why frequentist tools are so useful in A/B testing and why careful experimental design matters just as much as computation.
