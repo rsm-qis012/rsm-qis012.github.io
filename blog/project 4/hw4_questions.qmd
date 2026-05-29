@@ -3,6 +3,7 @@ title: "MSBA Class Preference Analysis Using MaxDiff"
 subtitle: "Counts, MLE MNL, and Bayesian MNL"
 author: "Qingyao Sun"
 date: today
+image: maxdiff_cover.png
 format:
   html:
     toc: true
@@ -196,6 +197,7 @@ plt.axvline(0, linewidth=1)
 plt.xlabel("Counts score: % best - % worst")
 plt.ylabel("")
 plt.tight_layout()
+plt.savefig("maxdiff_cover.png", dpi=200, bbox_inches="tight")
 plt.show()
 ```
 
